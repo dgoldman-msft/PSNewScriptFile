@@ -1,0 +1,11 @@
+﻿TOPIC
+	about_PSNewScriptFile
+
+SHORT DESCRIPTION
+	Module for creating fully documented template script files
+
+LONG DESCRIPTION
+	This helper module will create a fully documented template script file with documented parameterss and help
+
+KEYWORDS
+	PSNewScriptFile
