@@ -64,11 +64,15 @@
 
             $finalScriptFile += ("`n`t.EXAMPLE")
             if (-NOT $Example) {
+                if($NumberOfParameters -eq 1){ $finalScriptFile += "`t`tC:\>$ScriptName.ps1 -Parameter Arguement" }
+                elseif($NumberOfParameters -gt 1) {
+                $index = 0
                 while ($index -lt $NumberOfParameters) {
                     $index ++
                     $tempString += "-Parameter Arguement "
                 }
                 $finalScriptFile += "`t`tC:\>$ScriptName.ps1 $tempString"
+            }
             }
             else { $finalScriptFile += "`t`t$Example" }
 
@@ -88,6 +92,7 @@
                 $finalScriptFile += "`t)"
             }
             elseif ($NumberOfParameters -gt 1) {
+                $index = 0
                 while ($index -lt $NumberOfParameters) {
                     $index ++
                     $finalScriptFile += "`t[Object]"
