@@ -1,10 +1,10 @@
 ﻿function New-PSScript {
     <#
     .SYNOPSIS
-        Module for creating script files
+        Function for creating script files
 
     .DESCRIPTION
-        This helper module will create a fully documented script file with documented parameterss and help
+        This helper function will create a fully documented script file with documented parameterss and help
 
     .EXAMPLE
         C:\> New-PSScript -ScriptName New-Script -NumberOfParameters 10 -Notes "New test script" -Synopsis "Script synopsis" -Description "New script description"
@@ -31,18 +31,80 @@
         $Description,
 
         [string]
+        $Example,
+
+        [string]
         $Notes,
 
         [ValidateRange(1, 20)]
         [Int32]
         $NumberOfParameters = 1,
 
+        [switch]
+        $Alias,
+
+        [switch]
+        $AllowNull,
+
+        [switch]
+        $AllowEmptyString,
+
+        [switch]
+        $AllowEmptyCollection,
+
+        [switch]
+        $HelpMessage,
+
+        [switch]
+        $Mandatory,
+
+        [switch]
+        $Position,
+
+        [switch]
+        $ParameterSet,
+
+        [switch]
+        $ValueFromPipeline,
+
+        [switch]
+        $ValueFromPipelineByPropertyName,
+
+        [switch]
+        $ValueFromRemainingArguements,
+
+        [switch]
+        $ValidateNotNull,
+
+        [switch]
+        $ValidateNotNullOrEmpty,
+
+        [switch]
+        $ValidateCount,
+
+        [switch]
+        $ValidateLength,
+
+        [switch]
+        $ValidatePattern,
+
+        [switch]
+        $ValidateRange,
+
+        [switch]
+        $ValidateSet,
+
+        [switch]
+        $ValidateScript,
+
         [bool]
         $EnableException
     )
 
     begin {
-        $scriptParameters = $PSBoundParameters | ConvertTo-PSFHashtable -Include FilePath, ScriptName, Synopsis, Description, Notes, NumberOfParameters, EnableException
+        $scriptParameters = $PSBoundParameters | ConvertTo-PSFHashtable -Include FilePath, ScriptName, Synopsis, Description, Notes, NumberOfParameters, Alias, Position, `
+            ValueFromPipeline, ValueFromPipelineByPropertyName, ValueFromRemainingArguements, HelpMessage, AllowNull, AllowEmptyString, AllowEmptyCollection, ParameterSet, `
+            Mandatory, ValidateNotNull, ValidateNotNullOrEmpty, ValidateCount, ValidateLength, ValidatePattern, ValidateRange, ValidateSet, ValidateScript, EnableException
     }
     process {
         Write-PSFMessage -Level Host -String 'New-PSScriptFile.StartScript'
