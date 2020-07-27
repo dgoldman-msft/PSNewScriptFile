@@ -15,7 +15,7 @@ cd c:\users\YourName\Documents\WindowsPowerShell\Modules
 ```powershell
 md PSNewScript
 ```
-> Create a new directory called PSNewScript to store this module
+> This will create a new directory called PSNewScript.
 
 3. Copy the contents of this project into this module directory
 
@@ -24,3 +24,5 @@ md PSNewScript
 ```powershell
 New-PSScript -ScriptName YourScriptName -NumberOfParameters <Value> -Notes "Your notes" -Synopsis "Your synopsis" -Description "Your description"
 ```
+
+Enjoy!
