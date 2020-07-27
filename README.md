@@ -6,21 +6,18 @@ will get you started quickly with using advanced functions and a fully functiona
 ## Getting Started with GetPSGalleryModStats
 1. First open a new PowerShell console as 'Administrator' and run the following command:
 ```powershell
-Navigate to c:\users\YourName\Documents\WindowsPowerShell\Modules
+cd c:\users\YourName\Documents\WindowsPowerShell\Modules
 ```
 > This will take you to your user default PowerShell module directory
 
 2. Run the following command:
 
 ```powershell
-Create a new directory called PSNewScript to store this module
+md PSNewScript
 ```
+> Create a new directory called PSNewScript to store this module
 
-3. Run the following command:
-
-```powershell
-Copy the contents of this project into this module directory
-```
+3. Copy the contents of this project into this module directory
 
 4. Run the following command:
 
