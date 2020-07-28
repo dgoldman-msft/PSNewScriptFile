@@ -62,7 +62,7 @@
         $Position,
 
         [switch]
-        $ParameterSet,
+        $ParameterSetName,
 
         [switch]
         $ValueFromPipeline,
@@ -71,7 +71,7 @@
         $ValueFromPipelineByPropertyName,
 
         [switch]
-        $ValueFromRemainingArguements,
+        $ValueFromRemainingArguments,
 
         [switch]
         $ValidateNotNull,
@@ -97,16 +97,19 @@
         [switch]
         $ValidateScript,
 
-        [bool]
+        [switch]
         $EnableException
     )
 
     begin {
-        $scriptParameters = $PSBoundParameters | ConvertTo-PSFHashtable -Include FilePath, ScriptName, Synopsis, Description, Notes, NumberOfParameters, Alias, Position, `
-            ValueFromPipeline, ValueFromPipelineByPropertyName, ValueFromRemainingArguements, HelpMessage, AllowNull, AllowEmptyString, AllowEmptyCollection, ParameterSet, `
-            Mandatory, ValidateNotNull, ValidateNotNullOrEmpty, ValidateCount, ValidateLength, ValidatePattern, ValidateRange, ValidateSet, ValidateScript, EnableException
+        $scriptParameters = $PSBoundParameters | ConvertTo-PSFHashtable -Include FilePath, ScriptName, Synopsis, Description, Notes, `
+            NumberOfParameters, Mandatory, Position, Alias, ValueFromPipeline, ValueFromPipelineByPropertyName, ValueFromRemainingArguments, HelpMessage, `
+            AllowNull, AllowEmptyString, AllowEmptyCollection, ParameterSetName, ValidateNotNull, ValidateNotNullOrEmpty, `
+            ValidateCount, ValidateLength, ValidatePattern, ValidateRange, ValidateSet, ValidateScript, -EnableException
     }
     process {
+
+        Write-PSFMessage -Level Host -String 'New-PSScriptFile.CheckingForExistingScript'
         Write-PSFMessage -Level Host -String 'New-PSScriptFile.StartScript'
         Initialize-NewScript @scriptParameters
     }

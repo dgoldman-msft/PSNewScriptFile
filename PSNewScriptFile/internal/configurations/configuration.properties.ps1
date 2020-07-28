@@ -20,12 +20,12 @@ Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.Notes' -va
 Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.NumberOfParameters' -value "NumberOfParameters" -Initialize -Validation 'string' -Description "NumberOfParameters Property"
 
 # Parameter validation attributes
-Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.ParameterSet' -value "ParameterSet" -Initialize -Validation 'string' -Description "ParameterSet Property"
-Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.Mandatory' -value "Mandatory" -Initialize -Validation 'string' -Description "Mandatory Property"
 Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.HelpMessage' -value "HelpMessage" -Initialize -Validation 'string' -Description "HelpMessage Property"
+Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.Mandatory' -value "Mandatory" -Initialize -Validation 'string' -Description "Mandatory Property"
+Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.ParameterSetName' -value "ParameterSetName" -Initialize -Validation 'string' -Description "ParameterSetName Property"
 Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.ValueFromPipeline' -value "ValueFromPipeline" -Initialize -Validation 'string' -Description "ValueFromPipeline Property"
 Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.ValueFromPipelineByPropertyName' -value "ValueFromPipelineByPropertyName" -Initialize -Validation 'string' -Description "ValueFromPipelineByPropertyName Property"
-Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.ValueFromRemainingArguements' -value "ValueFromRemainingArguements" -Initialize -Validation 'string' -Description "ValueFromRemainingArguements Property"
+Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.ValueFromRemainingArguments' -value "ValueFromRemainingArguments" -Initialize -Validation 'string' -Description "ValueFromRemainingArguments Property"
 
 # Attribute for aliases
 Set-PSFConfig -Module 'PSNewScriptFile' -Name 'Configuration.Property.Alias' -value "Alias" -Initialize -Validation 'string' -Description "Alias Property"

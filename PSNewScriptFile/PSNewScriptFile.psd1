@@ -3,7 +3,7 @@
 	RootModule = 'PSNewScriptFile.psm1'
 
 	# Version number of this module.
-	ModuleVersion = '1.0.0'
+	ModuleVersion = '1.0.1'
 
 	# ID used to uniquely identify this module
 	GUID = '08922ec4-1b8c-4e78-9548-1be42b6b4705'

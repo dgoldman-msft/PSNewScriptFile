@@ -31,6 +31,7 @@
         [string]
         $Notes,
 
+        [ValidateRange(1, 20)]
         [Int32]
         $NumberOfParameters = 1,
 
@@ -56,7 +57,7 @@
         $Position,
 
         [switch]
-        $ParameterSet,
+        $ParameterSetName,
 
         [switch]
         $ValueFromPipeline,
@@ -65,7 +66,7 @@
         $ValueFromPipelineByPropertyName,
 
         [switch]
-        $ValueFromRemainingArguements,
+        $ValueFromRemainingArguments,
 
         [switch]
         $ValidateNotNull,
@@ -111,7 +112,7 @@
     }
     process {
         [System.Collections.ArrayList]$finalScriptFile = @()
-        Write-PSFMessage -String 'Initialize-NewScript.CreatingScript' -StringValues $ScriptName
+        Write-PSFMessage -String 'Initialize-NewScript.Initialize' -StringValues $ScriptName
         # Check save file path and create it if the directory is not found
         try {
             #region_Notes
@@ -133,12 +134,12 @@
 
             $finalScriptFile += ("`n`t.EXAMPLE")
             if (-NOT $Example) {
-                if ($NumberOfParameters -eq 1) { $finalScriptFile += "`t`tC:\> $ScriptName.ps1 -Parameter Arguement" }
+                if ($NumberOfParameters -eq 1) { $finalScriptFile += "`t`tC:\> $ScriptName.ps1 -Parameter Argument" }
                 elseif ($NumberOfParameters -gt 1) {
                     $index = 0
                     while ($index -lt $NumberOfParameters) {
                         $index ++
-                        $tempString += "-Parameter Arguement "
+                        $tempString += "-Parameter Argumeent "
                     }
                     $finalScriptFile += "`t`tC:\>$ScriptName.ps1 $tempString"
                 }
@@ -155,26 +156,16 @@
             $finalScriptFile += "`n`t[CmdletBinding()]`n`tparam("
 
             #region_Construct_Parameters_Output
+
             $index = 0  # Reset counter
-            if ($NumberOfParameters -eq 1) {
-                if ($validationParameters.Count -gt 0) {
-                    foreach ($item in $validationParameters.Keys) { $finalScriptFile += Add-ParametersToScriptfile -Parameter $item }
-                }
-                $finalScriptFile += "`t[ObjectType]"
-                $finalScriptFile += "`t`$parameter$index"
-                $finalScriptFile += "`t)"
-            }
-            elseif ($NumberOfParameters -gt 1) {
+            if ($NumberOfParameters) {
                 $index = 0
                 while ($index -lt $NumberOfParameters) {
                     $index ++
-                    if ($validationParameters.Count -gt 0) {
-
-                        $finalScriptFile += Add-ParametersToScriptfile -ParameterList $validationParameters
-                        $finalScriptFile += "`t[ObjectType]"
-                        if ($index -ne $NumberOfParameters) { $finalScriptFile += "`t`$parameter$index,`n" }
-                        else { $finalScriptFile += "`t`$parameter$index`n" }
-                    }
+                    $finalScriptFile += Add-ParametersToScriptfile -UserSuppliedParameterList $validationParameters -Index $index
+                    $finalScriptFile += "`t[ObjectType]"
+                    if ($index -ne $NumberOfParameters) { $finalScriptFile += "`t`$parameter$index,`n" }
+                    else { $finalScriptFile += "`t`$parameter$index`n" }
                 }
             }
             #endregion_Construct_Parameters_Output

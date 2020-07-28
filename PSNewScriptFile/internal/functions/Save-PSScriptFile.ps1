@@ -30,28 +30,28 @@
 
     begin {
         if (-Not $Filepath) {
-            $Filepath = Get-PSFConfigValue -FullName "PSNewScriptFile.Save.Directory"
+            $Filepath = Get-PSFConfigValue -FullName 'PSNewScriptFile.Save.Directory'
         }
     }
 
     process {
         try {
             if (-NOT (Test-Path -Path $Filepath -ErrorAction SilentlyContinue)) {
-                Write-PSFMessage -Level Host -String 'Save-PSScriptFile.DirectoryNoteFound' -StringValues $Filepath
+                Write-PSFMessage -Level Host -String 'Save-PSScriptFile.DirectoryNotFound' -StringValues $Filepath
                 New-Item -Path $Filepath -ItemType Directory -Force
             }
         }
         catch {
-            Stop-PSFFunction -String "Save-PSScriptFile.DirectoryFailure" -EnableException $EnableException -ErrorRecord $_
+            Stop-PSFFunction -String 'Save-PSScriptFile.DirectoryException' -EnableException $EnableException -ErrorRecord $_
         }
 
         try {
-            $newFileName = Join-Path -Path $FilePath -ChildPath ("$ScriptName.ps1")
-            Write-PSFMessage -String 'Save-PSScriptFile.SaveScript' -StringValues $newFileName
-            $ScriptFileContents | Out-File -FilePath $newFileName
+            Find-ExistingScript -ScriptName $ScriptName
+            Write-PSFMessage -Level Host -String 'Save-PSScriptFile.SaveScript' -StringValues $ScriptName
+            $ScriptFileContents | Set-Content -Path (Join-Path -Path $Filepath -ChildPath ("$ScriptName.ps1")) # using set-content will output to string, all out commands go through the ps formatter
         }
         catch {
-            Stop-PSFFunction -Message "Save-PSScriptFile.FileFailure" -EnableException $EnableException -ErrorRecord $_
+            Stop-PSFFunction -String "Save-PSScriptFile.FileException" -EnableException $EnableException -ErrorRecord $_
         }
     }
     end {}

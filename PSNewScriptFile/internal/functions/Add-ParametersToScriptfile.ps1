@@ -13,29 +13,41 @@
     [CmdletBinding()]
     param(
         [Hashtable]
-        $ParameterList
+        $UserSuppliedParameterList,
+
+        [Int]
+        $Index
     )
 
     # construct two seperate lists
-    [System.Collections.ArrayList]$attributeList = @()
     [string[]]$returnList = @()
+    [System.Collections.ArrayList]$parameterList = @()
+    [System.Collections.ArrayList]$validationAttributeList = @()
+
     $propertiesToRemove = @(
         (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.Mandatory"),
-        (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.ParameterSet"),
+        (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.ParameterSetName"),
         (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.ValueFromPipeline"),
         (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.ValueFromPipelineByPropertyName"),
-        (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.ValueFromRemainingArguements"),
+        (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.ValueFromRemainingArguments"),
         (Get-PSFConfigValue -FullName "PSNewScriptFile.Configuration.Property.HelpMessage")
     )
 
-    foreach ($removeProp in $propertiesToRemove) {
-        [void]$ParameterList.Remove($removeProp)
-        [void]$attributeList.Add($removeProp)
+    foreach ($prop in $UserSuppliedParameterList.Keys)
+    {
+        if($propertiesToRemove -contains $prop)
+        {
+            [void]$parameterList.Add($prop)
+        }
+        else {
+            [void]$validationAttributeList.Add($prop)
+        }
     }
 
+    Write-PSFMessage -Level Verbose -String 'Add-ParametersToScriptfile.BuildingParameterAndAttributeList' -StringValues $Index
     $returnList += "`t[Parameter("
     $commaCounter = 1
-    foreach ($prop in $attributeList) {
+    foreach ($prop in ($parameterList | Sort-Object)) {
         switch ($prop) {
             { $prop -eq 'Mandatory' } {
                 $returnList += "$prop = `$True"
@@ -47,12 +59,12 @@
                 break
             }
 
-            { $prop -eq 'ValueFromPipeline' -or $prop -eq 'ValueFromPipelineByPropertyName' -or $prop -eq 'ValueFromRemainingArguements' } {
+            { $prop -eq 'ValueFromPipeline' -or $prop -eq 'ValueFromPipelineByPropertyName' -or $prop -eq 'ValueFromRemainingArguments' } {
                 $returnList += "$prop = `$True"
                 break
             }
 
-            { $prop -eq 'ParameterSet' } {
+            { $prop -eq 'ParameterSetName' } {
                 $returnList += "$prop = ('Set1')"
                 break
             }
@@ -68,7 +80,7 @@
             }
         }
 
-        if ($commaCounter -lt $attributeList.Count) {
+        if ($commaCounter -lt $parameterList.Count) {
             $commaCounter++
             $returnList += ", "
         }
@@ -78,40 +90,41 @@
         }
     }
 
-    foreach ($Parameter in $ParameterList.Keys) {
-        switch ($Parameter) {
-            { $Parameter -eq 'Alias' } {
-                $returnList += "`t[$Parameter('Default')]"
+    foreach ($parameter in $validationAttributeList) {
+        switch ($parameter) {
+            { $parameter -eq 'Alias' } {
+                $returnList += "`t[$parameter('Default')]"
                 break
             }
 
-            { $Parameter -eq 'AllowOrNull' -or $Parameter -eq 'AllowEmptyString' -or $Parameter -eq 'AllowEmptyCollection' -or $Parameter -eq 'ValidateNotNull' -or $Parameter -eq 'ValidateNotNullOrEmpty' } {
-                $returnList += "`t[$Parameter()]"
+            { $parameter -eq 'AllowOrNull' -or $parameter -eq 'AllowEmptyString' -or $parameter -eq 'AllowEmptyCollection' -or $parameter -eq 'ValidateNotNull' -or $parameter -eq 'ValidateNotNullOrEmpty' } {
+                $returnList += "`t[$parameter()]"
                 break
             }
 
-            { $Parameter -eq 'ValidateCount' -or $Parameter -eq 'ValidateLength' } {
-                $returnList += "`t[$Parameter(min, max)]"
+            { $parameter -eq 'ValidateCount' -or $parameter -eq 'ValidateLength' } {
+                $returnList += "`t[$parameter(min, max)]"
                 break
             }
 
-            { $Parameter -eq 'ValidatePattern' } {
-                $returnList += "`t[$Parameter('^[a-z][A-Z]')]"
+            { $parameter -eq 'ValidatePattern' } {
+                $returnList += "`t[$parameter('^[a-z][A-Z]')]"
                 break
             }
 
-            { $Parameter -eq 'ValidateRange' } {
-                $returnList += "`t[$Parameter(min, max)]"
+            { $parameter -eq 'ValidateRange' } {
+                $returnList += "`t[$parameter(min, max)]"
                 break
             }
 
-            { $Parameter -eq 'ValidateScript' } {
-                $returnList += "`t[$Parameter({scriptblock})]"
+            { $parameter -eq 'ValidateScript' } {
+                $returnList += "`t[$parameter({scriptblock})]"
                 break
             }
         }
     }
 
+    Write-PSFMessage -Level Verbose -String 'Add-ParametersToScriptfile.PropertyAndAttributeListComplete'
     return $returnList
 }
 
